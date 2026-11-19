@@ -66,4 +66,70 @@ def test_resolved_ticket_displays_resolved_status(client):
     assert "Resolved" in page
 
 # Add your own tests below: one failing test for each bug you find,
+
 # plus at least 5 negative tests.
+#NEGITIVE TEST CASE 1
+
+def test_unknown_category_returns_400(client):
+    response = client.post(
+        "/api/tickets",
+        json={
+            "title": "Printer jam",
+            "category": "Furniture"
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.get_json()["error"] == "Unknown category"
+
+#NEGITIVE TEST CASE 2
+def test_unknown_priority_returns_400(client):
+    response = client.post(
+        "/api/tickets",
+        json={
+            "title": "Printer jam",
+            "category": "Hardware",
+            "priority": "Urgent"
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.get_json()["error"] == "Unknown priority"
+
+#NEGITIVE TEST CASE 3
+def test_missing_title_returns_400(client):
+    response = client.post(
+        "/api/tickets",
+        json={
+            "description": "Paper stuck",
+            "category": "Hardware",
+            "priority": "High"
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.get_json()["error"] == "Title is required"
+
+
+#NEGITIVE TEST CASE 4
+def test_invalid_status_returns_400(client):
+    response = client.patch(
+        "/api/tickets/1/status",
+        json={"status": "Pending"}
+    )
+
+    assert response.status_code == 400
+    assert response.get_json()["error"] == "Unknown status"
+
+
+#NEGITIVE TEST CASE 5
+def test_update_nonexistent_ticket_returns_404(client):
+    response = client.patch(
+        "/api/tickets/9999/status",
+        json={"status": "Resolved"}
+    )
+
+    assert response.status_code == 404
+    assert response.get_json()["error"] == "Ticket not found"
+
+
