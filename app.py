@@ -79,8 +79,11 @@ def create_ticket():
     description = data.get("description", "")
     category = data.get("category", "Other")
     priority = data.get("priority", "Medium")
-
-    if title is None:
+#original empty title code
+    #if title is None:
+        #return jsonify({"error": "Title is required"}), 400
+        
+    if not title or not title.strip():
         return jsonify({"error": "Title is required"}), 400
     if category not in CATEGORIES:
         return jsonify({"error": "Unknown category"}), 400
