@@ -117,11 +117,19 @@ def change_status(ticket_id):
 
 
 # ---------- Screen ----------
-
+#before ui modification
+"""
 STATUS_LABELS = {
     "Open": "Open",
     "In Progress": "In Progress",
     "Resolved": "Open",
+    "Closed": "Closed",
+}"""
+#after ui modification
+STATUS_LABELS = {
+    "Open": "Open",
+    "In Progress": "In Progress",
+    "Resolved": "Resolved",
     "Closed": "Closed",
 }
 
