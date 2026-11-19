@@ -28,5 +28,42 @@ def test_unknown_ticket_returns_404(client):
     assert response.status_code == 404
 
 
+#1
+def test_tickets_are_sorted_by_priority(client):
+    response = client.get("/api/tickets")
+
+    assert response.status_code == 200
+
+    priorities = [ticket["priority"] for ticket in response.get_json()]
+
+    assert priorities == ["High", "High", "Medium", "Medium", "Low"]
+
+#2
+
+def test_empty_title_returns_400(client):
+    response = client.post(
+        "/api/tickets",
+        json={
+            "title": "",
+            "description": "Paper stuck",
+            "category": "Hardware",
+            "priority": "High"
+        }
+    )
+
+    assert response.status_code == 400
+
+#3
+
+def test_resolved_ticket_displays_resolved_status(client):
+    response = client.get("/")
+
+    assert response.status_code == 200
+
+    page = response.get_data(as_text=True)
+
+    assert "Excel keeps crashing on startup" in page
+    assert "Resolved" in page
+
 # Add your own tests below: one failing test for each bug you find,
 # plus at least 5 negative tests.
